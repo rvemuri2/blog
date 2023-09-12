@@ -1,10 +1,12 @@
 class BlogPostsController < ApplicationController
+    before_action :authenticate_user!, except: [:index, :show]
     before_action :set_blog_post, except: [:index, :new, :create] #only: [:show, :update, :edit, :destory]
+
     def index
         @blog_posts = BlogPost.all
     end
     def show
-       
+    end
     
     def new 
         @blog_post = BlogPost.new
@@ -18,9 +20,10 @@ class BlogPostsController < ApplicationController
 
         end
     end
+
     def edit 
-       
     end
+
     def update
        
         if @blog_post.update(blog_post_params) 
@@ -29,8 +32,8 @@ class BlogPostsController < ApplicationController
             render :edit, status: :unprocessable_entity
         end
     end
+
     def destroy
-        
         @blog_post.destroy
         redirect_to root_path
     end
@@ -39,10 +42,10 @@ class BlogPostsController < ApplicationController
     def blog_post_params
         params.require(:blog_post).permit(:title, :body)
     end
+
     def set_blog_post
         @blog_post = BlogPost.find(params[:id])
     rescue ActiveRecord::RecordNotFound
         redirect_to root_path 
-    end
     end
 end
